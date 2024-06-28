@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5001;
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: 'https://twitter-scraper-frontend2.onrender.com/'
+  origin: 'https://twitter-scraper-frontend2.onrender.com'
 }));
 
 // Increase the payload size limit
@@ -17,11 +17,19 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.post('/get-data', async (req, res) => {
   const { tweetId } = req.body;
+  console.log('Received request with tweetId:', tweetId); // Log the received tweetId
+
+  if (!tweetId) {
+    console.log('Invalid tweetId:', tweetId); // Log invalid tweetId
+    return res.status(400).json({ error: 'Invalid tweetId' });
+  }
+
   try {
     const cleanedData = await getDataAndWriteFile(tweetId);
     console.log('Cleaned data received from getDataAndWriteFile:', cleanedData);
     res.json({ cleanedData });
   } catch (error) {
+    console.error('Error processing request:', error); // Log any errors
     res.status(500).json({ error: error.message });
   }
 });
