@@ -11,6 +11,9 @@ app.use(cors({
   origin: 'https://twitter-scraper-frontend2.onrender.com'
 }));
 
+// Handle preflight requests
+app.options('*', cors());
+
 // Increase the payload size limit
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
